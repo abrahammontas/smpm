@@ -12,7 +12,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'Laravel',
+    'name' => 'Social Media Post Manager',
 
     /*
     |--------------------------------------------------------------------------
@@ -180,6 +180,7 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
 
+        Laravel\Socialite\SocialiteServiceProvider::class
     ],
 
     /*
@@ -230,6 +231,8 @@ return [
 
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 
