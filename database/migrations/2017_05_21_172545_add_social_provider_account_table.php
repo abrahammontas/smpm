@@ -14,8 +14,9 @@ class AddSocialProviderAccountTable extends Migration
     public function up()
     {
         Schema::table('accounts', function (Blueprint $table) {
-            $table->string('provider')->after('column');
+            $table->string('provider')->after('identifier');
             $table->string('provider_id')->after('provider');
+            $table->dropColumn('identifier');
         });
     }
 
@@ -29,6 +30,7 @@ class AddSocialProviderAccountTable extends Migration
         Schema::table('posts', function (Blueprint $table) {
             $table->dropColumn('provider_id');
             $table->dropColumn('provider');
+            $table->string('identifier');
         });
     }
 }
