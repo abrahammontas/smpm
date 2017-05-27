@@ -43,7 +43,6 @@ class AccountController extends Controller
         $account = Account::create([
             'account_id'    => 1,
             'text'       => $request->input('name'),
-            'identifier' => $request->input('identifier'),
             'password'   => $request->input('password')
         ]);
 
@@ -94,7 +93,6 @@ class AccountController extends Controller
         $account = Account::where('id', '=', $id)->update([
             'user_id'    => 1,
             'name'       => $request->input('name'),
-            'identifier' => $request->input('identifier'),
             'password'   => $request->input('password')
         ]);
 

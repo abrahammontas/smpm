@@ -19,11 +19,15 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-Route::resource('account', 'AccountController');
+Route::group(['middleware' => ['auth']], function () {
 
-Route::resource('post', 'PostController');
+    Route::resource('account', 'AccountController');
 
-Route::resource('ImagesPost', 'ImagesPostController');
+    Route::resource('post', 'PostController');
+
+    Route::resource('ImagesPost', 'ImagesPostController');
+
+});
 
 Route::get('auth/{provider}', 'Auth\RegisterController@redirectToProvider');
 

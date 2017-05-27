@@ -51,7 +51,7 @@
 			    	</ul>
 			    </div>
 			@endif
-		</div>	
+		</div>
 
 </div>
 
@@ -59,10 +59,8 @@
 
 @section('scripts')
         <!-- JavaScripts -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>{{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment-with-locales.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment-with-locales.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 	<script>
 
 		$('#post_time').datetimepicker({

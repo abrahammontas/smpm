@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 
   <div class="col-sm-12 col-md-12 main">

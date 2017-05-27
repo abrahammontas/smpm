@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 		<div class="col-lg-4">
@@ -12,14 +10,6 @@
 			    <?php echo Form::text('name', null,
 			        array('class'=>'form-control', 
 			              'placeholder'=>'Twitter account')); ?>
-
-			</div>
-			<div class="form-group">
-				<?php echo Form::label('Identifier/User'); ?>
-
-				<?php echo Form::text('identifier', null,
-                    array('class'=>'form-control',
-                          'placeholder'=>'abrahammontas')); ?>
 
 			</div>
 			<div class="form-group">

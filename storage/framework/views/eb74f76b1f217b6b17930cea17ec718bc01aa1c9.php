@@ -57,6 +57,20 @@
                             <li><a href="<?php echo e(url('/register')); ?>">Register</a></li>
                         <?php else: ?>
                             <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Post<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo e(url('/post/create')); ?>"><i class="glyphicon glyphicon-pencil"></i>Add</a></li>
+                                    <li><a href="<?php echo e(url('/post')); ?>"><i class="glyphicon glyphicon-list-alt"></i> List</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Accounts<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="<?php echo e(url('/account/create')); ?>"><i class="glyphicon glyphicon-pencil"></i>Add</a></li>
+                                    <li><a href="<?php echo e(url('/account')); ?>"><i class="glyphicon glyphicon-list-alt"></i> List</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     <?php echo e(Auth::user()->name); ?> <span class="caret"></span>
                                 </a>

@@ -12,12 +12,6 @@
                           'placeholder'=>'Twitter account')) !!}
 			</div>
 			<div class="form-group">
-				{!! Form::label('User') !!}
-				{!! Form::text('identifier', null,
-                    array('class'=>'form-control',
-                          'placeholder'=>'Twitter account')) !!}
-			</div>
-			<div class="form-group">
 				{!! Form::label('Password') !!}
 				{!! Form::text('password', null,
                     array('class'=>'form-control',

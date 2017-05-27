@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('css'); ?>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css">
 <?php $__env->stopSection(); ?>
@@ -57,7 +55,7 @@
 			    	</ul>
 			    </div>
 			<?php endif; ?>
-		</div>	
+		</div>
 
 </div>
 
@@ -65,10 +63,8 @@
 
 <?php $__env->startSection('scripts'); ?>
         <!-- JavaScripts -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment-with-locales.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment-with-locales.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/bootstrap.datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
 	<script>
 
 		$('#post_time').datetimepicker({
