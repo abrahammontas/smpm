@@ -180,7 +180,9 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
 
-        Laravel\Socialite\SocialiteServiceProvider::class
+        Laravel\Socialite\SocialiteServiceProvider::class,
+
+        TCG\Voyager\VoyagerServiceProvider::class,
     ],
 
     /*

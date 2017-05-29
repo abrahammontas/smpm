@@ -32,3 +32,13 @@ Route::group(['middleware' => ['auth']], function () {
 Route::get('auth/{provider}', 'Auth\RegisterController@redirectToProvider');
 
 Route::get('auth/{provider}/callback', 'Auth\RegisterController@handleProviderCallback');
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});

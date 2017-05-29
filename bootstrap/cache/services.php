@@ -29,6 +29,7 @@
     25 => 'App\\Providers\\RouteServiceProvider',
     26 => 'Collective\\Html\\HtmlServiceProvider',
     27 => 'Laravel\\Socialite\\SocialiteServiceProvider',
+    28 => 'TCG\\Voyager\\VoyagerServiceProvider',
   ),
   'eager' => 
   array (
@@ -46,6 +47,7 @@
     11 => 'App\\Providers\\AuthServiceProvider',
     12 => 'App\\Providers\\EventServiceProvider',
     13 => 'App\\Providers\\RouteServiceProvider',
+    14 => 'TCG\\Voyager\\VoyagerServiceProvider',
   ),
   'deferred' => 
   array (
