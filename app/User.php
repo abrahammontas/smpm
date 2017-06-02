@@ -31,4 +31,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SocialProvider::class);
     }
+
+    function tokenFor($provider = 'facebook')
+    {
+
+    }
 }

@@ -78,7 +78,7 @@ class RegisterController extends Controller
      */
     public function redirectToProvider($provider)
     {
-        return Socialite::driver($provider)->redirect();
+        return Socialite::driver($provider)->scopes(['publish_actions'])->redirect();
     }
 
     /**
@@ -98,6 +98,7 @@ class RegisterController extends Controller
         }
         //check if we have logged provider
         $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())->first();
+
         if(!$socialProvider)
         {
             //create a new user and provider
@@ -106,11 +107,15 @@ class RegisterController extends Controller
                 ['name' => $socialUser->getName()]
             );
             $user->socialProviders()->create(
-                ['provider_id' => $socialUser->getId(), 'provider' => $provider]
+                ['provider_id' => $socialUser->getId(), 'provider' => $provider, 'token' => $socialUser->token]
             );
         }
-        else
+        else {
             $user = $socialProvider->user;
+            SocialProvider::where('user_id', '=', $user->id)
+                ->where('provider_id', '=', $socialUser->getId())
+                ->update(['token' => $socialUser->token]);
+        }
         auth()->login($user);
         return redirect('/home');
     }

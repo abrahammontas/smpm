@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SocialProvider extends Model
 {
-    protected $fillable = ['provider_id','provider'];
+    protected $fillable = ['provider_id', 'provider', 'token'];
 
     function user()
     {
