@@ -13,8 +13,8 @@ class AddBoolPublishedPostTable extends Migration
      */
     public function up()
     {
-        Schema::table('posts', function ($table) {
-            $table->softDeletes();
+        Schema::table('posts', function (Blueprint $table) {
+            $table->boolean('pulished')->default(0);
         });
     }
 
