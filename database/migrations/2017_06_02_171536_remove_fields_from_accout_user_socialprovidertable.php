@@ -14,12 +14,12 @@ class RemoveFieldsFromAccoutUserSocialprovidertable extends Migration
     public function up()
     {
         Schema::table('accounts', function (Blueprint $table) {
+            $table->dropForeign('accounts_user_id_foreign');
             $table->dropColumn('user_id');
             $table->dropColumn('provider');
             $table->dropColumn('provider_id');
             $table->dropColumn('password');
-            $table->integer('social_provider_id')->unsigned();
-            $table->foreign('social_provider_id')->references('id')->on('social_providers');
+            $table->integer('social_provider_id')->unsigned()->after('name');
         });
     }
 
