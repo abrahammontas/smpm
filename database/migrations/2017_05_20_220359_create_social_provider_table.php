@@ -18,7 +18,10 @@ class CreateSocialProviderTable extends Migration
             $table->integer('user_id')->unsigned()->references('id')->on('users');
             $table->string('provider_id');
             $table->string('provider');
+            $table->string('token');
+            $table->string('alias');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
     /**

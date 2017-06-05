@@ -11,7 +11,7 @@
           {!! Form::open(array('url' => 'post')) !!}
           	<div class="form-group">
 			    {!! Form::label('Text') !!}
-			    {!! Form::text('text', null,
+			    {!! Form::textarea('text', null,
 			        array('class'=>'form-control', 
 			              'placeholder'=>'Twitter account')) !!}
 			</div>
