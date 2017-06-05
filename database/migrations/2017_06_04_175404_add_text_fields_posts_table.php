@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBoolPublishedPostTable extends Migration
+class AddTextFieldsPostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddBoolPublishedPostTable extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->boolean('published')->default(0)->after('featured');
+            $table->string('text')->after('account_id');
         });
     }
 
@@ -26,7 +26,7 @@ class AddBoolPublishedPostTable extends Migration
     public function down()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->dropColumn('published');
+            $table->dropColumn('text');
         });
     }
 }
