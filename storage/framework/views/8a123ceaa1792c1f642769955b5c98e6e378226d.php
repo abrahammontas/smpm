@@ -25,7 +25,11 @@
                   <td><?php echo e($p->text); ?></td>
                   <td><?php echo e($p->post_time); ?></td>
                   <td><?php echo e($p->account->alias); ?></td>
-                  <td><?php echo e($p->images->first()->image); ?></td>
+                  <td>
+                      <?php if(isset($p->images->first()->image)): ?>
+                          <img style="height:100px;" class="img img-responsive" src="/posts/<?php echo e($p->images->first()->image); ?>"/>
+                      <?php endif; ?>
+                  </td>
                     <td>
                         <?php echo Form::open(array('method' => 'DELETE', 'route' => array('post.destroy', $p->id))); ?>
 

@@ -8,6 +8,7 @@ use App\Post;
 use App\Account;
 use App\Http\Requests;
 use Session;
+use Storage;
 use App\Http\Requests\PostRules;
 
 class PostController extends Controller
@@ -49,11 +50,11 @@ class PostController extends Controller
         if(isset($post->id)){
             if($request->image) {
                 $hash = md5(microtime());
-                Storage::put('/posts/'.$hash.$request->image->extension(), file_get_contents($request->file('image')));
+                Storage::put('/posts/'.$hash.'.'.$request->image->extension(), file_get_contents($request->file('image')));
 
                 ImagesPost::create([
                     'post_id' => $post->id,
-                    'image' => $hash.$request->image->extension()
+                    'image' => $hash.'.'.$request->image->extension()
                 ]);
             }
 
