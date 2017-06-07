@@ -30,6 +30,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('ImagesPost', 'ImagesPostController');
 });
 
+Route::group(['middleware' => ['guest']], function () {
+
+    Route::get('register', 'Auth\RegisterController@showRegistrationForm');
+});
+
 Route::get('auth/{provider}', 'Auth\RegisterController@redirectToProvider');
 
 Route::get('auth/{provider}/callback', 'Auth\RegisterController@handleProviderCallback');

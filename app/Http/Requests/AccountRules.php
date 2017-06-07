@@ -24,8 +24,7 @@ class AccountRules extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'social_provider_id' => 'required|unique:accounts,name|unique:accounts,user_id'
+            'alias' => 'required'
         ];
     }
 }

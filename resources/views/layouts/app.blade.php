@@ -56,6 +56,9 @@
                             <li><a href="{{ url('/register') }}">Register</a></li>
                         @else
                             <li class="dropdown">
+                                <a href="/home" role="button" aria-haspopup="true" aria-expanded="false">Dashboard</a>
+                            </li>
+                            <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Post<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ url('/post/create') }}"><i class="glyphicon glyphicon-pencil"></i>Add</a></li>

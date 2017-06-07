@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ImagesPost;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Account;
@@ -41,11 +42,21 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRules $request)
     {
         $post = Post::create($request->all());
 
         if(isset($post->id)){
+            if($request->image) {
+                $hash = md5(microtime());
+                Storage::put('/posts/'.$hash.$request->image->extension(), file_get_contents($request->file('image')));
+
+                ImagesPost::create([
+                    'post_id' => $post->id,
+                    'image' => $hash.$request->image->extension()
+                ]);
+            }
+
             $message = "The post '".$request->input('name')."' has been created successfully.";
             $class = "alert alert-success";
         }

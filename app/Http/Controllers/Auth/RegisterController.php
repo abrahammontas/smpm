@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use Socialite;
+use Session;
 use App\Http\Controllers\Controller;
 use App\SocialProvider;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
@@ -38,7 +40,6 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
     }
 
     /**
@@ -53,6 +54,7 @@ class RegisterController extends Controller
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
+            'role_id' => 2,
         ]);
     }
 
@@ -97,6 +99,7 @@ class RegisterController extends Controller
         }
         catch(\Exception $e)
         {
+            dd($e);
             session('message',$e);
             session('class-message','alert alert-danger');
             return redirect('/');
@@ -130,7 +133,7 @@ class RegisterController extends Controller
 
         if(Auth::check()) {
             session('message', 'The account called "'.$socialUser->getName()."'s ".$provider." has been created succesfully!");
-            return redirect('/accounts');
+            return redirect('/account');
         }
         else {
             auth()->login($user);

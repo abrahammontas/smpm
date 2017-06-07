@@ -9,7 +9,7 @@ class Account extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'social_providers'
+    protected $table = 'social_providers';
     /**
      * The attributes that should be mutated to dates.
      *

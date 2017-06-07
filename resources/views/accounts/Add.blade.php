@@ -4,16 +4,9 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 		<div class="col-lg-4">
           <h2 class="sub-header">Add a new account</h2>
-          {!! Form::open(array('url' => 'account')) !!}
-          	<div class="form-group">
-			    {!! Form::label('Alias') !!}
-			    {!! Form::text('alias', null,
-			        array('class'=>'form-control', 
-			              'placeholder'=>'Abraham\'s Twitter account')) !!}
-			</div>
-			<button class="btn btn-primary btn-block" type="submit">Add</button>
-		  {!! Form::close() !!}
-			<br>
+			<h4>Select one of these social medias.</h4>
+			{{--<a href="{{ url('/auth/twitter') }}" class="btn btn-primary"><i class="fa fa-twitter"></i> Twitter</a>--}}
+			<a href="{{ url('/auth/facebook') }}" class="btn btn-primary"><i class="fa fa-facebook"></i> Facebook</a>
 		</div>			
 </div>
 

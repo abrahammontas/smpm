@@ -13,7 +13,7 @@
 				{!! Form::label('Text') !!}
 				{!! Form::text('text', null,
                     array('class'=>'form-control',
-                          'placeholder'=>'Twitter account')) !!}
+                          'placeholder'=>'Get your best deals HEREE!!!')) !!}
 			</div>
 			<div class="form-group">
 				{!! Form::label('Post time') !!}
@@ -29,7 +29,7 @@
 				{!! Form::label('Account') !!}
 				<select class= "form-control" name="account_id" id="account_id">
 					@foreach($accounts as $a)
-						<option value="{{$a->id}}">{{ $a->name }}</option>
+						<option value="{{$a->id}}">{{ $a->alias }}</option>
 					@endforeach
 				</select>
 			</div>
