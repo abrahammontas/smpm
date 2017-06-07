@@ -9,6 +9,7 @@ class Account extends Model
 {
     use SoftDeletes;
 
+    protected $table = 'social_providers'
     /**
      * The attributes that should be mutated to dates.
      *
@@ -22,7 +23,7 @@ class Account extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'name', 'social_provider_id'
+        'user_id', 'provider_id', 'provider', 'token', 'alias'
     ];
 
     public function user()
