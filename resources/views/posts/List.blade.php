@@ -27,7 +27,7 @@
                   <td>{{ $p->text }}</td>
                   <td>{{ $p->post_time }}</td>
                   <td>{{ $p->account->alias }}</td>
-                  <td>{{ $p->images->first()->image }}</td>
+                  <td></td>
                     <td>
                         {!! Form::open(array('method' => 'DELETE', 'route' => array('post.destroy', $p->id))) !!}
                         <div class="btn-group" role="group" aria-label="...">
