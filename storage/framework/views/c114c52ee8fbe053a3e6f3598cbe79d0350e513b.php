@@ -3,7 +3,7 @@
 		<div class="col-lg-4">
           <h2 class="sub-header">Add a new account</h2>
 			<h4>Select one of these social medias.</h4>
-			
+			<a href="<?php echo e(url('/auth/twitter')); ?>" class="btn btn-primary"><i class="fa fa-twitter"></i> Twitter</a>
 			<a href="<?php echo e(url('/auth/facebook')); ?>" class="btn btn-primary"><i class="fa fa-facebook"></i> Facebook</a>
 		</div>			
 </div>

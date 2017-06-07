@@ -53,8 +53,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-            'role_id' => 2,
+            'password' => 'required|min:6|confirmed'
         ]);
     }
 
@@ -70,6 +69,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'role_id' => 2,
         ]);
     }
 
@@ -80,7 +80,11 @@ class RegisterController extends Controller
      */
     public function redirectToProvider($provider)
     {
-        return Socialite::driver($provider)->scopes(['publish_actions'])->redirect();
+        if($provider == 'facebook') {
+            return Socialite::driver($provider)->scopes(['publish_actions'])->redirect();
+        } else {
+            return Socialite::driver($provider)->redirect();
+        }
     }
 
     /**
@@ -97,38 +101,78 @@ class RegisterController extends Controller
         {
             $socialUser = Socialite::driver($provider)->user();
         }
+
         catch(\Exception $e)
         {
-            dd($e);
             session('message',$e);
             session('class-message','alert alert-danger');
             return redirect('/');
         }
         //check if we have logged provider
-        $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())->first();
 
-        if(!$socialProvider)
-        {
-            //create a new user and provider
-            $user = User::firstOrCreate(
-                ['email' => $socialUser->getEmail()],
-                ['name' => $socialUser->getName()],
-                ['role_id' => 2]
-            );
-            $user->socialProviders()->create(
-                [
-                    'provider_id' => $socialUser->getId(),
-                    'provider' => $provider,
-                    'token' => $socialUser->token,
-                    'alias' => $socialUser->getName()."'s ".$provider
-                ]
-            );
-        }
-        else {
-            $user = $socialProvider->user;
-            SocialProvider::where('user_id', '=', $user->id)
-                ->where('provider_id', '=', $socialUser->getId())
-                ->update(['token' => $socialUser->token]);
+        $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())->get();
+
+        if(Auth::check()) {
+            $user= Auth::user();
+            $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())
+                ->where('user_id', '=', $user->id)
+                ->first();
+
+            dd($socialUser);
+
+            if($socialProvider) {
+                $socialProvider->update(['token' => $socialUser->token]);
+            } else {
+                $user->socialProviders()->create(
+                    [
+                        'provider_id' => $socialUser->getId(),
+                        'provider' => $provider,
+                        'token' => $socialUser->token,
+                        'alias' => $socialUser->getName()."'s ".$provider
+                    ]
+                );
+            }
+
+        } else {
+            $userRegistered = User::where('email', '=', $socialUser->getEmail())->first();
+
+            if(!$userRegistered) {
+                $user = User::create(
+                    ['email' => $socialUser->getEmail()],
+                    ['name' => $socialUser->getName()],
+                    ['role_id' => 2]
+                );
+
+                $user->socialProviders()->create(
+                    [
+                        'provider_id' => $socialUser->getId(),
+                        'provider' => $provider,
+                        'token' => $socialUser->token,
+                        'alias' => $socialUser->getName()."'s ".$provider
+                    ]
+                );
+            } else {
+
+                $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())
+                    ->where('user_id', '=', $userRegistered->id)
+                    ->first();
+
+                if(!$socialProvider) {
+                    $userRegistered->socialProviders()->create(
+                        [
+                            'provider_id' => $socialUser->getId(),
+                            'provider' => $provider,
+                            'token' => $socialUser->token,
+                            'alias' => $socialUser->getName()."'s ".$provider
+                        ]
+                    );
+
+                } else {
+                    SocialProvider::where('user_id', '=', $user->id)
+                        ->where('provider_id', '=', $socialUser->getId())
+                        ->update(['token' => $socialUser->token]);
+                }
+            }
         }
 
         if(Auth::check()) {

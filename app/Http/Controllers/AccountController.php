@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Account;
 use App\Http\Requests;
 use Session;
+use Auth;
 use App\Http\Requests\AccountRules;
 
 class AccountController extends Controller
@@ -17,7 +18,7 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $accounts = Account::all();
+        $accounts = Account::where('user_id', '=', Auth::id())->get();
 
         return view('accounts.List', ['accounts' => $accounts]);
     }
