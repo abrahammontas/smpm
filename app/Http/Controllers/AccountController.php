@@ -41,13 +41,11 @@ class AccountController extends Controller
     public function store(AccountRules $request)
     {
         $account = Account::create([
-            'account_id'    => 1,
-            'text'       => $request->input('name'),
-            'password'   => $request->input('password')
+            'alias'    => $request->input('alias')
         ]);
 
         if(isset($account->id)){
-            $message = "The account '".$request->input('name')."' has been created successfully.";
+            $message = "The account '".$request->input('alias')."' has been created successfully.";
             $class = "alert alert-success";
         }
         else{
@@ -91,13 +89,11 @@ class AccountController extends Controller
     public function update(AccountRules $request, $id)
     {
         $account = Account::where('id', '=', $id)->update([
-            'user_id'    => 1,
-            'name'       => $request->input('name'),
-            'password'   => $request->input('password')
+            'alias'    => $request->input('alias')
         ]);
 
         if(isset($account)){
-            $message = "The account '".$request->input('name')."' has been edited successfully.";
+            $message = "The account '".$request->input('alias')."' has been edited successfully.";
             $class   = "alert alert-success";
         }
         else{

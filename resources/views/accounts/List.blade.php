@@ -12,16 +12,19 @@
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Name</th>
-                  <th>User</th>
+                  <th>Alias</th>
+                  <th>Provider</th>
+                  <th>Created at</th>
+                  <th>Options</th>
                 </tr>
               </thead>
               <tbody>
                 @foreach($accounts as $a)
                 <tr>
                   <td>{{ $a->id }}</td>
-                  <td>{{ $a->name }}</td>
-                  <td>{{ $a->identifier }}</td>
+                  <td>{{ $a->alias }}</td>
+                  <td>{{ $a->provider }}</td>
+                  <td>{{ $a->created_at }}</td>
                 </tr>
                 @endforeach
               </tbody>

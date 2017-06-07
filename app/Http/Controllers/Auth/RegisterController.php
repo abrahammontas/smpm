@@ -88,12 +88,17 @@ class RegisterController extends Controller
      */
     public function handleProviderCallback($provider)
     {
+        session('message','');
+        session('class-message','alert alert-success');
+
         try
         {
             $socialUser = Socialite::driver($provider)->user();
         }
         catch(\Exception $e)
         {
+            session('message',$e);
+            session('class-message','alert alert-danger');
             return redirect('/');
         }
         //check if we have logged provider
@@ -108,7 +113,12 @@ class RegisterController extends Controller
                 ['role_id' => 2]
             );
             $user->socialProviders()->create(
-                ['provider_id' => $socialUser->getId(), 'provider' => $provider, 'token' => $socialUser->token]
+                [
+                    'provider_id' => $socialUser->getId(),
+                    'provider' => $provider,
+                    'token' => $socialUser->token,
+                    'alias' => $socialUser->getName()."'s ".$provider
+                ]
             );
         }
         else {
@@ -117,8 +127,15 @@ class RegisterController extends Controller
                 ->where('provider_id', '=', $socialUser->getId())
                 ->update(['token' => $socialUser->token]);
         }
-        auth()->login($user);
-        return redirect('/home');
+
+        if(Auth::check()) {
+            session('message', 'The account called "'.$socialUser->getName()."'s ".$provider." has been created succesfully!");
+            return redirect('/accounts');
+        }
+        else {
+            auth()->login($user);
+            return redirect('/home');
+        }
     }
 
 }

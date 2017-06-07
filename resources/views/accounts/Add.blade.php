@@ -6,16 +6,10 @@
           <h2 class="sub-header">Add a new account</h2>
           {!! Form::open(array('url' => 'account')) !!}
           	<div class="form-group">
-			    {!! Form::label('Name') !!}
-			    {!! Form::text('name', null,
+			    {!! Form::label('Alias') !!}
+			    {!! Form::text('alias', null,
 			        array('class'=>'form-control', 
-			              'placeholder'=>'Twitter account')) !!}
-			</div>
-			<div class="form-group">
-				{!! Form::label('Password') !!}
-				{!! Form::text('password', null,
-                    array('class'=>'form-control',
-                          'placeholder'=>'Twitter account')) !!}
+			              'placeholder'=>'Abraham\'s Twitter account')) !!}
 			</div>
 			<button class="btn btn-primary btn-block" type="submit">Add</button>
 		  {!! Form::close() !!}
