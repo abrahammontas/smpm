@@ -13,19 +13,9 @@ class AddOrderToDataRowsTable extends Migration
      */
     public function up()
     {
-        DB::table('roles')->insert(
-            array(
-                'name' => 'admin',
-                'display_name' => 'admin'
-            )
-        );
-
-        DB::table('roles')->insert(
-            array(
-                'name' => 'user',
-                'display_name' => 'user'
-            )
-        );
+        Schema::table('data_rows', function (Blueprint $table) {
+            $table->integer('order')->default(1)->after('details');
+        });
     }
 
     /**
@@ -35,6 +25,8 @@ class AddOrderToDataRowsTable extends Migration
      */
     public function down()
     {
-        DB::table('roles')->where('id', '>', 0)->delete();
+        Schema::table('data_rows', function (Blueprint $table) {
+            $table->dropColumn('order');
+        });
     }
 }

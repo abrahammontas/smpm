@@ -13,7 +13,23 @@ class AddDefaultRoles extends Migration
      */
     public function up()
     {
-        //
+        DB::table('roles')->insert(
+            array(
+                'name' => 'admin',
+                'display_name' => 'admin',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            )
+        );
+
+        DB::table('roles')->insert(
+            array(
+                'name' => 'user',
+                'display_name' => 'user',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            )
+        );
     }
 
     /**
@@ -23,6 +39,6 @@ class AddDefaultRoles extends Migration
      */
     public function down()
     {
-        //
+        DB::table('roles')->where('id', '>', 0)->delete();
     }
 }
