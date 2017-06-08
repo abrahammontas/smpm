@@ -101,7 +101,27 @@ class PostController extends Controller
      */
     public function update(PostRules $request, $id)
     {
-        $post = Post::where('id', '=', $id)->update($request->all());
+        $post = Post::where('id', '=', $id)->update([
+                'text' => $request->input('text'),
+                'post_time' => $request->input('post_time'),
+                'account_id' => $request->input('account_id'),
+            ]);
+
+        if($request->image) {
+            $post = Post::find($post);
+            if(isset($post->images->first()->image)) {
+                Storage::remove('/posts/'.$post->images->first()->image);
+                ImagesPost::where('image', '=', $post->images->first()->image)->delete();
+            }
+            
+            $hash = md5(microtime());
+            Storage::put('/posts/'.$hash.'.'.$request->image->extension(), file_get_contents($request->file('image')));
+
+            ImagesPost::create([
+                'post_id' => $post->id,
+                'image' => $hash.'.'.$request->image->extension()
+            ]);
+        }
 
         if(isset($post)){
             $message = "The post '".$request->input('name')."' has been edited successfully.";

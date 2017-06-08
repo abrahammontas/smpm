@@ -16,31 +16,6 @@ class CronController extends Controller
     public function index()
     {
         $this->facebook();
-
-        // $stack = \GuzzleHttp\HandlerStack::create();
-
-        // $middleware = new \GuzzleHttp\Subscriber\Oauth\Oauth1([
-        //     'consumer_key'    => env('TWITTER_ID'),
-        //     'consumer_secret' => env('TWITTER_SECRET'),
-        //     'token' => '172391612-c67YejrksZLDNILVpsnHmsJK8Pw8KcuDV1RwV0XM',
-        //     'token_secret' => 'xOQ8DMMtX7HV58sxgTQbHJB7I4KTNhmrQF49BG9xIJJpb',
-        // ]);
-
-        // $stack->push($middleware);
-
-        // $client = new \GuzzleHttp\Client([
-        //     'base_uri' => 'https://api.twitter.com/1.1/',
-        //     'handler' => $stack,
-        //     'auth' => 'oauth'
-        // ]);
-
-        // $response = $client->post('statuses/update.json', [
-        //     'form_params' => [
-        //         'status' => 'Test Tweet'
-        //     ]
-        // ]);
-
-        // dd($response);
     }
 
 
@@ -92,10 +67,49 @@ class CronController extends Controller
            echo 'Facebook SDK returned an error: ' . $e->getMessage();
            exit;
        }
-       // $graphNode = $img->getGraphNode();
-
-       // echo 'Photo ID: ' . $graphNode['id'];
 
        print_r($user);
+    }
+
+    public function twitter() 
+    {
+       try {
+
+            $posts = Post::with('account')->where('published', false)
+                        ->where('post_time', '<', date('Y-m-d H:i:s'))
+                        ->whereHas('account', function($query){
+                            $query->where('provider', 'facebook');
+                        })->get();
+
+           foreach($posts as $post) {
+                $user = User::where('id', '=', $post->account->user->id)->first();
+                $stack = \GuzzleHttp\HandlerStack::create();
+
+                $middleware = new \GuzzleHttp\Subscriber\Oauth\Oauth1([
+                    'consumer_key'    => env('TWITTER_ID'),
+                    'consumer_secret' => env('TWITTER_SECRET'),
+                    'token' => $post->account->token,
+                    'token_secret' => $post->account->token_secret,
+                ]);
+
+                $stack->push($middleware);
+
+                $client = new \GuzzleHttp\Client([
+                    'base_uri' => 'https://api.twitter.com/1.1/',
+                    'handler' => $stack,
+                    'auth' => 'oauth'
+                ]);
+
+                $response = $client->post('statuses/update.json', [
+                    'form_params' => [
+                        'status' => 'Test Tweet'
+                    ]
+                ]);
+            }
+        } catch(\GuzzleHttp\Subscriber\Exceptions $e) {
+                   // When Graph returns an error
+                   echo 'Graph returned an error: ' . $e->getMessage();
+               }
+
     }
 }

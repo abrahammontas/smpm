@@ -1,11 +1,21 @@
 <?php $__env->startSection('content'); ?>
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 		<div class="col-lg-4">
-          <h2 class="sub-header">Add a new account</h2>
-			<h4>Select one of these social medias.</h4>
-			<a href="<?php echo e(url('/auth/twitter')); ?>" class="btn btn-primary"><i class="fa fa-twitter"></i> Twitter</a>
-			<a href="<?php echo e(url('/auth/facebook')); ?>" class="btn btn-primary"><i class="fa fa-facebook"></i> Facebook</a>
-		</div>			
+		  <h2 class="sub-header">Edit account (<?php echo e($account->alias); ?>)</h2>
+          <?php echo Form::model($account, array('route' => array('account.update', $account->id),'method' => 'put')); ?>
+
+			<div class="form-group">
+				<?php echo Form::label('Alias'); ?>
+
+				<?php echo Form::text('alias', null,
+                    array('class'=>'form-control',
+                          'placeholder'=>'Abraham\'s Twitter account')); ?>
+
+			</div>
+			<button class="btn btn-primary btn-block" type="submit">Edit</button>
+		  <?php echo Form::close(); ?>
+
+		</div>	
 </div>
 
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
