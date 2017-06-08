@@ -21,14 +21,15 @@ Route::get('/home', 'HomeController@index');
 
 Route::group(['middleware' => ['auth']], function () {
 
-    Route::get('cron', 'CronController@index');
-
     Route::resource('account', 'AccountController');
 
     Route::resource('post', 'PostController');
 
     Route::resource('ImagesPost', 'ImagesPostController');
 });
+
+
+Route::get('cron', 'CronController@index');
 
 Route::group(['middleware' => ['guest']], function () {
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use App\Post;
+use App\User;
 
 class CronController extends Controller
 {
@@ -13,59 +15,87 @@ class CronController extends Controller
      */
     public function index()
     {
-        $stack = \GuzzleHttp\HandlerStack::create();
+        $this->facebook();
 
-        $middleware = new \GuzzleHttp\Subscriber\Oauth\Oauth1([
-            'consumer_key'    => env('TWITTER_ID'),
-            'consumer_secret' => env('TWITTER_SECRET'),
-            'token' => '172391612-c67YejrksZLDNILVpsnHmsJK8Pw8KcuDV1RwV0XM',
-            'token_secret' => 'xOQ8DMMtX7HV58sxgTQbHJB7I4KTNhmrQF49BG9xIJJpb',
-        ]);
+        // $stack = \GuzzleHttp\HandlerStack::create();
 
-        $stack->push($middleware);
+        // $middleware = new \GuzzleHttp\Subscriber\Oauth\Oauth1([
+        //     'consumer_key'    => env('TWITTER_ID'),
+        //     'consumer_secret' => env('TWITTER_SECRET'),
+        //     'token' => '172391612-c67YejrksZLDNILVpsnHmsJK8Pw8KcuDV1RwV0XM',
+        //     'token_secret' => 'xOQ8DMMtX7HV58sxgTQbHJB7I4KTNhmrQF49BG9xIJJpb',
+        // ]);
 
-        $client = new \GuzzleHttp\Client([
-            'base_uri' => 'https://api.twitter.com/1.1/',
-            'handler' => $stack,
-            'auth' => 'oauth'
-        ]);
+        // $stack->push($middleware);
 
-        $response = $client->post('statuses/update.json', [
-            'form_params' => [
-                'status' => 'Test Tweet'
-            ]
-        ]);
+        // $client = new \GuzzleHttp\Client([
+        //     'base_uri' => 'https://api.twitter.com/1.1/',
+        //     'handler' => $stack,
+        //     'auth' => 'oauth'
+        // ]);
 
-        dd($response);
+        // $response = $client->post('statuses/update.json', [
+        //     'form_params' => [
+        //         'status' => 'Test Tweet'
+        //     ]
+        // ]);
 
-//        $fb = new \Facebook\Facebook();
-//
-//        try {
-//            $user = Auth::user();
-//
-//            // Get the \Facebook\GraphNodes\GraphUser object for the current user.
-//            // If you provided a 'default_access_token', the '{access-token}' is optional.
-//            $response = $fb->get('/me/accounts', $user->socialProviders()->where('provider', '=', 'facebook')->first()->token);
-//            $token = $response->getAccessToken();
-//
-//            $data = [
-//                'message' => 'My awesome photo upload example.',
-//                'source' => $fb->fileToUpload('https://media.licdn.com/media/AAEAAQAAAAAAAANbAAAAJDE5NjBkNDk1LTY3ZGQtNDA0NS04YTJiLTdkNmU3NjZiNjI3Mg.png'),
-//            ];
-//
-//            $img = $fb->post('/me/photos', $data, $token);
-//
-//        } catch(\Facebook\Exceptions\FacebookResponseException $e) {
-//            // When Graph returns an error
-//            echo 'Graph returned an error: ' . $e->getMessage();
-//            exit;
-//        } catch(\Facebook\Exceptions\FacebookSDKException $e) {
-//            // When validation fails or other local issues
-//            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-//            exit;
-//        }
-//        $graphNode = $img->getGraphNode();
-//
-//        echo 'Photo ID: ' . $graphNode['id'];
+        // dd($response);
+    }
+
+
+    public function facebook()
+    {
+        $fb = new \Facebook\Facebook();
+
+       try {
+
+            $posts = Post::with('account')->where('published', false)
+                        ->where('post_time', '<', date('Y-m-d H:i:s'))
+                        ->whereHas('account', function($query){
+                            $query->where('provider', 'facebook');
+                        })->get();
+
+           foreach($posts as $post) {
+               $user = User::where('id', '=', $post->account->user->id)->first();
+
+               // Get the \Facebook\GraphNodes\GraphUser object for the current user.
+               // If you provided a 'default_access_token', the '{access-token}' is optional.
+               $response = $fb->get('/me/accounts', $post->account->token);
+               $accessToken = $response->getAccessToken();
+
+                if(count($post->images) > 0) {
+                   $data = [
+                       'message' => 'My awesome photo upload example.',
+                       'source' => $fb->fileToUpload('https://media.licdn.com/media/AAEAAQAAAAAAAANbAAAAJDE5NjBkNDk1LTY3ZGQtNDA0NS04YTJiLTdkNmU3NjZiNjI3Mg.png'),
+                   ];
+                   $url = '/me/photos';
+
+                } else {
+                    $data = [
+                       'message' => 'My awesome photo upload example.',
+                    ];
+                    $url = $post->account->provider_id.'/feed';
+                } 
+
+               $img = $fb->post($url, $data, $accessToken);
+
+               Post::where('id', $post->id)->update(['published' => 1]);
+           }
+
+       } catch(\Facebook\Exceptions\FacebookResponseException $e) {
+           // When Graph returns an error
+           echo 'Graph returned an error: ' . $e->getMessage();
+           exit;
+       } catch(\Facebook\Exceptions\FacebookSDKException $e) {
+           // When validation fails or other local issues
+           echo 'Facebook SDK returned an error: ' . $e->getMessage();
+           exit;
+       }
+       // $graphNode = $img->getGraphNode();
+
+       // echo 'Photo ID: ' . $graphNode['id'];
+
+       print_r($user);
     }
 }

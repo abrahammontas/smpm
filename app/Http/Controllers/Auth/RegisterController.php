@@ -118,51 +118,55 @@ class RegisterController extends Controller
                 ->where('user_id', '=', $user->id)
                 ->first();
 
-            dd($socialUser);
-
             if($socialProvider) {
-                $socialProvider->update(['token' => $socialUser->token]);
+                $socialProvider->update([
+                    'token' => $socialUser->token, 
+                    'token_secret' => $socialUser->tokenSecret
+                    ]);
             } else {
                 $user->socialProviders()->create(
                     [
                         'provider_id' => $socialUser->getId(),
                         'provider' => $provider,
-                        'token' => $socialUser->token,
+                        'token' => $socialUser->token, 
+                        'token_secret' => $socialUser->tokenSecret,
                         'alias' => $socialUser->getName()."'s ".$provider
                     ]
                 );
             }
 
         } else {
-            $userRegistered = User::where('email', '=', $socialUser->getEmail())->first();
+            $user = User::where('email', '=', $socialUser->getEmail())->first();
 
-            if(!$userRegistered) {
+            if(!$user) {
                 $user = User::create(
-                    ['email' => $socialUser->getEmail()],
-                    ['name' => $socialUser->getName()],
-                    ['role_id' => 2]
+                    ['email' => $socialUser->getEmail(),
+                    'name' => $socialUser->getName(),
+                    'role_id' => 2]
                 );
 
                 $user->socialProviders()->create(
                     [
                         'provider_id' => $socialUser->getId(),
                         'provider' => $provider,
-                        'token' => $socialUser->token,
+                        'token' => $socialUser->token, 
+                        'token_secret' => $socialUser->tokenSecret,
                         'alias' => $socialUser->getName()."'s ".$provider
                     ]
                 );
             } else {
 
                 $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())
-                    ->where('user_id', '=', $userRegistered->id)
+                    ->where('user_id', '=', $user->id)
                     ->first();
 
                 if(!$socialProvider) {
-                    $userRegistered->socialProviders()->create(
+                    $user->socialProviders()->create(
                         [
                             'provider_id' => $socialUser->getId(),
                             'provider' => $provider,
-                            'token' => $socialUser->token,
+                            'token' => $socialUser->token, 
+                            'token_secret' => $socialUser->tokenSecret,
                             'alias' => $socialUser->getName()."'s ".$provider
                         ]
                     );
@@ -170,7 +174,10 @@ class RegisterController extends Controller
                 } else {
                     SocialProvider::where('user_id', '=', $user->id)
                         ->where('provider_id', '=', $socialUser->getId())
-                        ->update(['token' => $socialUser->token]);
+                        ->update([
+                            'token' => $socialUser->token, 
+                            'token_secret' => $socialUser->tokenSecret
+                            ]);
                 }
             }
         }

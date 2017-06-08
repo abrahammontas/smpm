@@ -6,14 +6,14 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 		<div class="col-lg-4">
           <h2 class="sub-header">Add a new post</h2>
-          <?php echo Form::open(array('url' => 'post')); ?>
+          <?php echo Form::open(array('url' => 'post', 'enctype' => 'multipart/form-data')); ?>
 
           	<div class="form-group">
 			    <?php echo Form::label('Text'); ?>
 
 			    <?php echo Form::textarea('text', null,
 			        array('class'=>'form-control', 
-			              'placeholder'=>'Twitter account')); ?>
+			              'placeholder'=>'Get your best deals HEREE!!!')); ?>
 
 			</div>
 			<div class="form-group">
@@ -32,9 +32,17 @@
 
 				<select class= "form-control" name="account_id" id="account_id">
 					<?php $__currentLoopData = $accounts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $a): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
-						<option value="<?php echo e($a->id); ?>"><?php echo e($a->name); ?></option>
+						<option value="<?php echo e($a->id); ?>"><?php echo e($a->alias); ?></option>
 					<?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
 				</select>
+			</div>
+
+			<div class="form-group">
+				<?php echo Form::label('Image'); ?>
+
+				<div class='input-group date' id='image'>
+					<input type='file' name="image" class="form-control" />
+				</div>
 			</div>
 
 			<button class="btn btn-primary btn-block" type="submit">Add</button>
