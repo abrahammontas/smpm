@@ -21,7 +21,7 @@
               </thead>
               <tbody>
                 @foreach($accounts as $a)
-                <tr>
+                <tr @if($a->error)class="danger"@endif>
                   <td>{{ $a->id }}</td>
                   <td>{{ $a->alias }}</td>
                   <td>{{ $a->provider }}</td>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\SocialProvider;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Auth;
 use App\Post;
 use App\User;
@@ -15,7 +17,7 @@ class CronController extends Controller
      */
     public function index()
     {
-        $this->facebook();
+        $this->twitter();
     }
 
 
@@ -67,8 +69,6 @@ class CronController extends Controller
            echo 'Facebook SDK returned an error: ' . $e->getMessage();
            exit;
        }
-
-       print_r($user);
     }
 
     public function twitter() 
@@ -78,7 +78,7 @@ class CronController extends Controller
             $posts = Post::with('account')->where('published', false)
                         ->where('post_time', '<', date('Y-m-d H:i:s'))
                         ->whereHas('account', function($query){
-                            $query->where('provider', 'facebook');
+                            $query->where('provider', 'twitter');
                         })->get();
 
            foreach($posts as $post) {
@@ -105,9 +105,11 @@ class CronController extends Controller
                         'status' => 'Test Tweet'
                     ]
                 ]);
+               SocialProvider::where('id', $post->account_id)->update(['error' => 0]);
             }
-        } catch(\GuzzleHttp\Subscriber\Exceptions $e) {
+        } catch(RequestException $e) {
                    // When Graph returns an error
+                   SocialProvider::where('id', $post->account_id)->update(['error' => 1]);
                    echo 'Graph returned an error: ' . $e->getMessage();
                }
 

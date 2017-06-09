@@ -16,7 +16,7 @@ class SocialProvider extends Model
      */
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['provider_id', 'provider', 'token', 'token_secret', 'alias'];
+    protected $fillable = ['provider_id', 'provider', 'token', 'token_secret', 'alias', 'error'];
 
     function user()
     {

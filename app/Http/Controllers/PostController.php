@@ -9,6 +9,7 @@ use App\Account;
 use App\Http\Requests;
 use Session;
 use Storage;
+use Auth;
 use App\Http\Requests\PostRules;
 
 class PostController extends Controller
@@ -20,7 +21,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
+        $accounts = Account::where('user_id', '=', Auth::id())
+            ->get()->toArray();
+
+        $posts = Post::whereIn('account_id', $accounts)->get();
 
         return view('posts.List', ['posts' => $posts]);
     }

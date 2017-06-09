@@ -19,7 +19,7 @@
               </thead>
               <tbody>
                 <?php $__currentLoopData = $accounts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $a): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
-                <tr>
+                <tr <?php if($a->error): ?>class="danger"<?php endif; ?>>
                   <td><?php echo e($a->id); ?></td>
                   <td><?php echo e($a->alias); ?></td>
                   <td><?php echo e($a->provider); ?></td>
