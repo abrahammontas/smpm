@@ -54,7 +54,7 @@ class PostController extends Controller
         if(isset($post->id)){
             if($request->image) {
                 $hash = md5(microtime());
-                Storage::put('/posts/'.$hash.'.'.$request->image->extension(), file_get_contents($request->file('image')));
+                Storage::disk('public')->put('/posts/'.$hash.'.'.$request->image->extension(), file_get_contents($request->file('image')));
 
                 ImagesPost::create([
                     'post_id' => $post->id,
@@ -114,12 +114,12 @@ class PostController extends Controller
         if($request->image) {
             $post = Post::find($post);
             if(isset($post->images->first()->image)) {
-                Storage::remove('/posts/'.$post->images->first()->image);
+                Storage::disk('public')->remove('/posts/'.$post->images->first()->image);
                 ImagesPost::where('image', '=', $post->images->first()->image)->delete();
             }
             
             $hash = md5(microtime());
-            Storage::put('/posts/'.$hash.'.'.$request->image->extension(), file_get_contents($request->file('image')));
+            Storage::disk('public')->put('/posts/'.$hash.'.'.$request->image->extension(), file_get_contents($request->file('image')));
 
             ImagesPost::create([
                 'post_id' => $post->id,
