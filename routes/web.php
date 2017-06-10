@@ -11,11 +11,12 @@
 |
 */
 
+Auth::routes();
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
@@ -26,6 +27,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('post', 'PostController');
 
     Route::resource('ImagesPost', 'ImagesPostController');
+
+	Route::get('change-password', 'Auth\UserController@change');
+	
+	Route::post('change-password', 'Auth\UserController@update');
+
+	Route::get('edit-profile', 'Auth\UserController@index');
+	
+	Route::post('edit-profile', 'Auth\UserController@edit');
 });
 
 
@@ -39,11 +48,6 @@ Route::group(['middleware' => ['guest']], function () {
 Route::get('auth/{provider}', 'Auth\RegisterController@redirectToProvider');
 
 Route::get('auth/{provider}/callback', 'Auth\RegisterController@handleProviderCallback');
-
-
-Route::group(['prefix' => 'admin'], function () {
-    Voyager::routes();
-});
 
 
 Route::group(['prefix' => 'admin'], function () {

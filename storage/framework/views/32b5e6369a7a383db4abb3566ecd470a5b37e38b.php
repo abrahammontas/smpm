@@ -80,11 +80,13 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="<?php echo e(url('/logout')); ?>"
+                                        <li><a href="<?php echo e(url('/edit-profile')); ?>"><i class="glyphicon glyphicon-pencil"></i> Edit profile</a></li>
+                                        <li><a href="<?php echo e(url('/change-password')); ?>"><i class="glyphicon glyphicon-edit"></i> Change password</a></li>
+                                        <li><a href="<?php echo e(url('/logout')); ?>"
                                             onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                     document.getElementById('logout-form').submit();"><i class="glyphicon glyphicon-log-out"></i> 
                                             Logout
-                                        </a>
+                                        </a></li>
 
                                         <form id="logout-form" action="<?php echo e(url('/logout')); ?>" method="POST" style="display: none;">
                                             <?php echo e(csrf_field()); ?>

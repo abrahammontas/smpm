@@ -79,11 +79,13 @@
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{{ url('/logout') }}"
+                                        <li><a href="{{ url('/edit-profile') }}"><i class="glyphicon glyphicon-pencil"></i> Edit profile</a></li>
+                                        <li><a href="{{ url('/change-password') }}"><i class="glyphicon glyphicon-edit"></i> Change password</a></li>
+                                        <li><a href="{{ url('/logout') }}"
                                             onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                                     document.getElementById('logout-form').submit();"><i class="glyphicon glyphicon-log-out"></i> 
                                             Logout
-                                        </a>
+                                        </a></li>
 
                                         <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
