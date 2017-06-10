@@ -75,7 +75,7 @@ class UserController extends Controller
 
         if($request->image) {
             $hash = md5(microtime());
-            Storage::put('/posts/'.$hash.'.'.$request->image->extension(), file_get_contents($request->file('image')));
+            Storage::disk('local')->put('/posts/'.$hash.'.'.$request->image->extension(), file_get_contents($request->file('image')));
 
             $user->fill([
                 'image' => $hash.'.'.$request->image->extension()

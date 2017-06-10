@@ -36,7 +36,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        $accounts = Account::all();
+        $accounts = Account::where('user_id', '=', Auth::id())
+            ->get();
 
         return view('posts.Add', ['accounts' => $accounts]);
     }

@@ -14,7 +14,7 @@
           	<div class="form-group">
 			    <?php echo Form::label('Name'); ?>
 
-			    <?php echo Form::text('name', null,
+			    <?php echo Form::text('name', $user->name,
 			        array('class'=>'form-control')); ?>
 
 			</div>

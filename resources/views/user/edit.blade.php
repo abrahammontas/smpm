@@ -14,7 +14,7 @@
           {!! Form::open(array('url' => 'edit-profile', 'enctype' => 'multipart/form-data')) !!}
           	<div class="form-group">
 			    {!! Form::label('Name') !!}
-			    {!! Form::text('name', null,
+			    {!! Form::text('name', $user->name,
 			        array('class'=>'form-control')) !!}
 			</div>
 			<div class="form-group">

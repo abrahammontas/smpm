@@ -53,3 +53,7 @@ Route::get('auth/{provider}/callback', 'Auth\RegisterController@handleProviderCa
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
