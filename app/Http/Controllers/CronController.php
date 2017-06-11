@@ -43,14 +43,14 @@ class CronController extends Controller
 
                 if(count($post->images) > 0) {
                    $data = [
-                       'message' => 'My awesome photo upload example.',
-                       'source' => $fb->fileToUpload('https://media.licdn.com/media/AAEAAQAAAAAAAANbAAAAJDE5NjBkNDk1LTY3ZGQtNDA0NS04YTJiLTdkNmU3NjZiNjI3Mg.png'),
+                       'message' => $post->text,
+                       'source' => $fb->fileToUpload($post->images->first()->image),
                    ];
                    $url = '/me/photos';
 
                 } else {
                     $data = [
-                       'message' => 'My awesome photo upload example.',
+                       'message' => $post->text,
                     ];
                     $url = $post->account->provider_id.'/feed';
                 } 

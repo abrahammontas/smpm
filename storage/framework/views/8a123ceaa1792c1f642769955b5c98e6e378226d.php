@@ -27,7 +27,7 @@
                   <td><?php echo e($p->account->alias); ?></td>
                   <td>
                       <?php if(isset($p->images->first()->image)): ?>
-                          <img style="height:100px;" class="img img-responsive" src="/posts/<?php echo e($p->images->first()->image); ?>"/>
+                          <img style="height:100px;" class="img img-responsive" src="asset('storage/posts/<?php echo e($p->images->first()->image); ?>"/>
                       <?php endif; ?>
                   </td>
                     <td>

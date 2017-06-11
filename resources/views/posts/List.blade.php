@@ -29,7 +29,7 @@
                   <td>{{ $p->account->alias }}</td>
                   <td>
                       @if(isset($p->images->first()->image))
-                          <img style="height:100px;" class="img img-responsive" src="/posts/{{$p->images->first()->image}}"/>
+                          <img style="height:100px;" class="img img-responsive" src="storage/posts/{{$p->images->first()->image}}"/>
                       @endif
                   </td>
                     <td>
