@@ -17,6 +17,7 @@
                   <th>Post time</th>
                   <th>Account</th>
                   <th>Image</th>
+                  <th>Status</th>
                   <th>Options</th>
                 </tr>
               </thead>
@@ -32,10 +33,18 @@
                           <img style="height:100px;" class="img img-responsive" src="/posts/{{$p->images->first()->image}}"/>
                       @endif
                   </td>
+                  <td>
+                      @if($p->published)
+                          <span class="label label-success">Published</span>
+                      @else
+                        <span class="label label-primary">Scheduled</span>
+                      @endif
+                  </td>
                     <td>
                         {!! Form::open(array('method' => 'DELETE', 'route' => array('post.destroy', $p->id))) !!}
                         <div class="btn-group" role="group" aria-label="...">
-                            <a href="{{url('post/'.$p->id.'/edit')}}" class='btn btn-primary'> Edit </a>
+                            <a href="{{url('post/'.$p->id.'/edit')}}" @if($p->published) disabled @endif class='btn btn-primary'> Edit </a>
+                            <a href="{{url('post/'.$p->id)}}" class='btn btn-info'> Show </a>
                             {!! Form::submit('Delete', array('class' => 'btn btn-danger')) !!}
                         </div>
                         {!! Form::close() !!}
