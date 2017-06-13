@@ -129,4 +129,31 @@ class AccountController extends Controller
         return redirect('account')->with('message', $message)
             ->with('class', $class);
     }
+
+    public function pages($accountId) 
+    {
+        $fb = new \Facebook\Facebook();
+
+       try {
+
+           $account = Account::find($accountId);
+           //$user = User::where('id', '=', $account->user->id)->first();
+
+           // Get the \Facebook\GraphNodes\GraphUser object for the current user.
+           // If you provided a 'default_access_token', the '{access-token}' is optional.
+           $response = $fb->get('/me/accounts', $account->token);
+           $accessToken = $response->getAccessToken();
+
+           dd($response->getBody());
+       }
+       catch(\Facebook\Exceptions\FacebookResponseException $e) {
+           // When Graph returns an error
+           echo 'Graph returned an error: ' . $e->getMessage();
+           exit;
+       } catch(\Facebook\Exceptions\FacebookSDKException $e) {
+           // When validation fails or other local issues
+           echo 'Facebook SDK returned an error: ' . $e->getMessage();
+           exit;
+       }
+    }
 }

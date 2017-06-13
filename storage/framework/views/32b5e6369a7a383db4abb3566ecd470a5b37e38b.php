@@ -56,6 +56,9 @@
                             <li><a href="<?php echo e(url('/login')); ?>">Login</a></li>
                             <li><a href="<?php echo e(url('/register')); ?>">Register</a></li>
                         <?php else: ?>
+                            <?php if(Auth::user()->role_id == 1): ?>
+                                <li><a href="<?php echo e(url('/admin')); ?>">Admin Dashboard</a></li>
+                            <?php endif; ?>
                             <li class="dropdown">
                                 <a href="/home" role="button" aria-haspopup="true" aria-expanded="false">Dashboard</a>
                             </li>
