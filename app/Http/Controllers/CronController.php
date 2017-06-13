@@ -43,14 +43,14 @@ class CronController extends Controller
 
                 if(count($post->images) > 0) {
                    $data = [
-                       'message' => 'My awesome photo upload example.',
-                       'source' => $fb->fileToUpload('https://media.licdn.com/media/AAEAAQAAAAAAAANbAAAAJDE5NjBkNDk1LTY3ZGQtNDA0NS04YTJiLTdkNmU3NjZiNjI3Mg.png'),
+                       'message' => $post->text,
+                       'source' => $fb->fileToUpload(url('/storage/post/'.$post->images->first()->image)),
                    ];
                    $url = '/me/photos';
 
                 } else {
                     $data = [
-                       'message' => 'My awesome photo upload example.',
+                       'message' => $post->text,
                     ];
                     $url = $post->account->provider_id.'/feed';
                 } 
@@ -94,23 +94,53 @@ class CronController extends Controller
 
                 $stack->push($middleware);
 
-                $client = new \GuzzleHttp\Client([
+                if(count($post->images) > 0) {
+                    $clientPost = new \GuzzleHttp\Client([
+                        'base_uri' => 'https://upload.twitter.com/1.1/',
+                        'handler' => $stack,
+                        'auth' => 'oauth'
+                    ]);
+
+                    $path = url('/storage/posts/'.$post->images->first()->image);
+
+                    $responseMedia = $clientPost->post('media/upload.json', [
+                        'multipart' => [
+                            [
+                                'name'     => 'media',
+                                'contents' => fopen($path, 'r')
+                            ],
+                        ]
+                    ]);
+                }
+
+                $clientPost = new \GuzzleHttp\Client([
                     'base_uri' => 'https://api.twitter.com/1.1/',
                     'handler' => $stack,
                     'auth' => 'oauth'
                 ]);
 
-                $response = $client->post('statuses/update.json', [
-                    'form_params' => [
-                        'status' => 'Test Tweet'
-                    ]
-                ]);
+               if($responseMedia->getStatusCode() == 200) {
+                   $response = $clientPost->post('statuses/update.json', [
+                       'form_params' => [
+                           'status' => $post->text,
+                           'media_ids' => json_decode($responseMedia->getBody())->media_id
+                       ]
+                   ]);
+               } else {
+                   $response = $clientPost->post('statuses/update.json', [
+                       'form_params' => [
+                           'status' => $post->text
+                       ]
+                   ]);
+               }
+
+               Post::where('id', $post->id)->update(['published' => 1]);
                SocialProvider::where('id', $post->account_id)->update(['error' => 0]);
             }
         } catch(RequestException $e) {
                    // When Graph returns an error
                    SocialProvider::where('id', $post->account_id)->update(['error' => 1]);
-                   echo 'Graph returned an error: ' . $e->getMessage();
+                   echo 'Twitter returned an error: ' . $e->getMessage();
                }
 
     }

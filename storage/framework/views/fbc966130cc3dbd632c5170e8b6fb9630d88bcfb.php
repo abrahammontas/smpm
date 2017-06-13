@@ -5,7 +5,13 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Dashboard</div>
 
-                <div class="panel-body">
+                <div class="panel-body">                
+                <?php if(Session::has('success')): ?>
+                    <div class="alert alert-success"><?php echo Session::get('success'); ?></div>
+                <?php endif; ?>
+                <?php if(Session::has('failure')): ?>
+                    <div class="alert alert-danger"><?php echo Session::get('failure'); ?></div>
+                <?php endif; ?>
                     You are logged in!
                 </div>
             </div>

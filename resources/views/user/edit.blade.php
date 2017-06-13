@@ -20,8 +20,7 @@
 			<div class="form-group">
 				{!! Form::label('Avatar') !!}
 				@if(isset($user->avatar))
-				{{$user->avatar}}
-	            	<img style="height:100px;" class="img img-responsive" src="/{{$user->avatar}}"/>
+	            	<img style="height:100px;" class="img img-responsive" src="storage/{{$user->avatar}}"/>
 	    		@endif
 				<div class='input-group date' id='avatar'>
 					<input type='file' name="avatar" class="form-control" />

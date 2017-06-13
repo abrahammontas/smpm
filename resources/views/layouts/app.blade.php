@@ -55,6 +55,9 @@
                             <li><a href="{{ url('/login') }}">Login</a></li>
                             <li><a href="{{ url('/register') }}">Register</a></li>
                         @else
+                            @if (Auth::user()->role_id == 1)
+                                <li><a href="{{ url('/admin') }}">Admin Dashboard</a></li>
+                            @endif
                             <li class="dropdown">
                                 <a href="/home" role="button" aria-haspopup="true" aria-expanded="false">Dashboard</a>
                             </li>

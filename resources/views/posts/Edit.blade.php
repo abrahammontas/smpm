@@ -36,7 +36,7 @@
 	        <div class="form-group">
 				{!! Form::label('Image') !!}
 				@if(isset($post->images->first()->image))
-	            <img style="height:100px;" class="img img-responsive" src="/posts/{{$post->images->first()->image}}"/>
+	            <img style="height:100px;" class="img img-responsive" src="storage/posts/{{$post->images->first()->image}}"/>
 	    		@endif
 				<div class='input-group date' id='image'>
 					<input type='file' name="image" class="form-control" />
