@@ -29,9 +29,10 @@
                   <td>
                       {!! Form::open(array('method' => 'DELETE', 'route' => array('account.destroy', $a->id))) !!}
                       <div class="btn-group" role="group" aria-label="...">
-                          <a href="{{url('account/'.$a->id.'/edit')}}" class='btn btn-primary'> Edit </a> 
-                          <a href="{{url('account/'.$a->id.'/pages')}}" class='btn btn-info'> Pages </a>
-
+                          <a href="{{url('account/'.$a->id.'/edit')}}" class='btn btn-primary'> Edit </a>
+                          @if($a->provider == 'facebook' && $a->facebook_page == 0)
+                            <a href="{{url('account/'.$a->id.'/pages')}}" class='btn btn-info'> Pages </a>
+                          @endif
                           {!! Form::submit('Delete', array('class' => 'btn btn-danger')) !!}
                       </div>
                       {!! Form::close() !!}

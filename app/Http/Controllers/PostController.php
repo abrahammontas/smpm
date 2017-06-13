@@ -21,8 +21,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $accounts = Account::where('user_id', '=', Auth::id())
-            ->get()->toArray();
+        $accounts = Account::where('user_id', '=', Auth::id())->select('id')->get()->toArray();
 
         $posts = Post::whereIn('account_id', $accounts)->get();
 
@@ -36,8 +35,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $accounts = Account::where('user_id', '=', Auth::id())
-            ->get();
+        $accounts = Account::where('user_id', '=', Auth::id())->get();
 
         return view('posts.Add', ['accounts' => $accounts]);
     }

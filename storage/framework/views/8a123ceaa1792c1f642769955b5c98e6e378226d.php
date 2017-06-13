@@ -43,7 +43,7 @@
 
                         <div class="btn-group" role="group" aria-label="...">
                             <a href="<?php echo e(url('post/'.$p->id.'/edit')); ?>" <?php if($p->published): ?> disabled <?php endif; ?> class='btn btn-primary'> Edit </a>
-                            <a href="<?php echo e(url('post/'.$p->id)); ?>" class='btn btn-info'> Show </a>
+                              <a href="<?php echo e(url('post/'.$p->id)); ?>" class='btn btn-info'> Show </a>
                             <?php echo Form::submit('Delete', array('class' => 'btn btn-danger')); ?>
 
                         </div>

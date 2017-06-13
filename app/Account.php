@@ -23,7 +23,7 @@ class Account extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'provider_id', 'provider', 'token', 'alias'
+        'user_id', 'provider_id', 'provider', 'token', 'alias', 'token_secret', 'facebook_page', 'father_id'
     ];
 
     public function user()

@@ -29,6 +29,9 @@
 
                       <div class="btn-group" role="group" aria-label="...">
                           <a href="<?php echo e(url('account/'.$a->id.'/edit')); ?>" class='btn btn-primary'> Edit </a>
+                          <?php if($a->provider == 'facebook' && $a->facebook_page == 0): ?>
+                            <a href="<?php echo e(url('account/'.$a->id.'/pages')); ?>" class='btn btn-info'> Pages </a>
+                          <?php endif; ?>
                           <?php echo Form::submit('Delete', array('class' => 'btn btn-danger')); ?>
 
                       </div>

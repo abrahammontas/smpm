@@ -142,9 +142,19 @@ class AccountController extends Controller
            // Get the \Facebook\GraphNodes\GraphUser object for the current user.
            // If you provided a 'default_access_token', the '{access-token}' is optional.
            $response = $fb->get('/me/accounts', $account->token);
-           $accessToken = $response->getAccessToken();
 
-           dd($response->getBody());
+           $fanPages = $response->getDecodedBody()['data'];
+
+           if(count($fanPages) > 0) {
+               return view('accounts.Pages', ['fanPages' => $fanPages, 'accountId' => $accountId]);
+           }
+
+           $message = "This account does not have any fan page linked.";
+           $class = "alert alert-danger";
+
+           return redirect('account')->with('message', $message)
+               ->with('class', $class);
+
        }
        catch(\Facebook\Exceptions\FacebookResponseException $e) {
            // When Graph returns an error
@@ -155,5 +165,68 @@ class AccountController extends Controller
            echo 'Facebook SDK returned an error: ' . $e->getMessage();
            exit;
        }
+    }
+
+    public function savePages(Request $request)
+    {
+        $fb = new \Facebook\Facebook();
+
+        try {
+                $accounts = $request->input('accounts');
+                $father = $request->input('accountId');
+
+                $user = Auth::user();
+
+                $fbAccount = Account::where('user_id', $user->id)->where('provider', 'facebook')->first();
+
+                // Get the \Facebook\GraphNodes\GraphUser object for the current user.
+                // If you provided a 'default_access_token', the '{access-token}' is optional.
+                $response = $fb->get('/me/accounts', $fbAccount->token);
+
+                $fanPages = $response->getDecodedBody()['data'];
+
+                foreach ($fanPages as $fanPage) {
+                    if(in_array($fanPage['id'], $accounts)) {
+                        $oldAccount = Account::where('provider_id',$fanPage['id'])->first();
+                        if(!$oldAccount) {
+                            Account::create([
+                                'user_id' => $user->id,
+                                'provider_id' => $fanPage['id'],
+                                'provider' => 'facebook',
+                                'token' => $fanPage['access_token'],
+                                'token_secret' => "",
+                                'alias' => $fanPage['name'] . "'s fan page",
+                                'facebook_page' => true,
+                                'father_id' => $father
+                            ]);
+                        } else {
+                            Account::where('provider_id',$fanPage['id'])->update([
+                                'token'    => $fanPage['access_token']
+                            ]);
+                        }
+                    }
+                }
+
+                $message = "Fan pages added!";
+                $class = "alert alert-success";
+
+                return redirect('account')->with('message', $message)
+                    ->with('class', $class);
+        } catch(\Facebook\Exceptions\FacebookResponseException $e) {
+            // When Graph returns an error
+            $message = 'Graph returned an error: ' . $e->getMessage();
+            $class = "alert alert-danger";
+
+            return redirect('account')->with('message', $message)
+                ->with('class', $class);
+
+        } catch(\Facebook\Exceptions\FacebookSDKException $e) {
+            // When validation fails or other local issues
+            $message = 'Facebook SDK returned an error: ' . $e->getMessage();
+            $class = "alert alert-danger";
+
+            return redirect('account')->with('message', $message)
+                ->with('class', $class);
+        }
     }
 }

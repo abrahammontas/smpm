@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Auth;
 use App\Post;
 use App\User;
+use App\Account;
 
 class CronController extends Controller
 {
@@ -17,7 +18,7 @@ class CronController extends Controller
      */
     public function index()
     {
-        $this->twitter();
+        $this->facebook();
     }
 
 
@@ -44,7 +45,7 @@ class CronController extends Controller
                 if(count($post->images) > 0) {
                    $data = [
                        'message' => $post->text,
-                       'source' => $fb->fileToUpload(url('/storage/post/'.$post->images->first()->image)),
+                       'source' => $fb->fileToUpload(url('/storage/posts/'.$post->images->first()->image)),
                    ];
                    $url = '/me/photos';
 
@@ -53,7 +54,7 @@ class CronController extends Controller
                        'message' => $post->text,
                     ];
                     $url = $post->account->provider_id.'/feed';
-                } 
+                }
 
                $img = $fb->post($url, $data, $accessToken);
 

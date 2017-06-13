@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('edit-profile', 'Auth\UserController@edit');
 
 	Route::get('account/{accountId}/pages', 'AccountController@pages');
+
+    Route::post('account/savepages', 'AccountController@savePages');
 });
 
 
