@@ -81,7 +81,7 @@ class RegisterController extends Controller
     public function redirectToProvider($provider)
     {
         if($provider == 'facebook') {
-            return Socialite::driver($provider)->scopes(['publish_actions'])->redirect();
+            return Socialite::driver($provider)->scopes(['publish_actions', 'manage_pages'])->redirect();
         } else {
             return Socialite::driver($provider)->redirect();
         }
