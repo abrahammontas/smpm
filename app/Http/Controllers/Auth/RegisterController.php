@@ -172,11 +172,16 @@ class RegisterController extends Controller
                     );
 
                 } else {
+                    if(isset($socialUser->tokenSecret)) {
+                        $tokenSecret = $socialUser->tokenSecret;
+                    } else {
+                        $tokenSecret = "";
+                    }
                     SocialProvider::where('user_id', '=', $user->id)
                         ->where('provider_id', '=', $socialUser->getId())
                         ->update([
                             'token' => $socialUser->token, 
-                            'token_secret' => $socialUser->tokenSecret
+                            'token_secret' => $tokenSecret
                             ]);
                 }
             }

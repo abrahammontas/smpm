@@ -17,7 +17,7 @@ class CronController extends Controller
      */
     public function index()
     {
-        $this->twitter();
+        $this->facebook();
     }
 
 
@@ -40,6 +40,7 @@ class CronController extends Controller
                // If you provided a 'default_access_token', the '{access-token}' is optional.
                $response = $fb->get('/me/accounts', $post->account->token);
                $accessToken = $response->getAccessToken();
+               dd($response);
 
                 if(count($post->images) > 0) {
                    $data = [
