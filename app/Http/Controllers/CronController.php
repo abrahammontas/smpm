@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\SocialProvider;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Auth;
 use App\Post;
@@ -35,20 +34,49 @@ class CronController extends Controller
                         })->get();
 
            foreach($posts as $post) {
-               $user = User::where('id', '=', $post->account->user->id)->first();
+               $fatherAccount = Account::find($post->account->father_id);
 
-               // Get the \Facebook\GraphNodes\GraphUser object for the current user.
-               // If you provided a 'default_access_token', the '{access-token}' is optional.
-               $response = $fb->get('/me/accounts', $post->account->token);
+               $response = $fb->get('/me/accounts', $fatherAccount->token);
+               $pages = $response->getDecodedBody()['data'];
+
+               foreach($pages as $page) {
+                if($page['id'] == $post->account->provider_id) {
+                  $pageAccessToken = $page['access_token'];
+                  $post->account->update([
+                            'token' => $pageAccessToken
+                            ]);
+                }
+               }
+
+
                $accessToken = $response->getAccessToken();
+
+                $data = [
+                   'grant_type' => 'fb_exchange_token',
+                   'client_id' => env('FB_ID'),
+                   'client_secret' => env('FB_SECRET'),
+                   'fb_exchange_token' => $accessToken
+                ];
+
+                $url = '/oauth/access_token' ;
+
+                $response = $fb->post($url, $data, $response->getAccessToken());
+
+                $fatherAccount->update([
+                            'token' => $response->getAccessToken()
+                            ]);
+
 
                 if(count($post->images) > 0) {
                    $data = [
                        'message' => $post->text,
                        'source' => $fb->fileToUpload(url('/storage/posts/'.$post->images->first()->image)),
                    ];
-                   $url = '/me/photos';
-
+                   if($post->account->facebook_page){
+                      $url = '/'.$post->account->provider_id.'/photos';
+                   } else {
+                      $url = '/me/photos';
+                   }
                 } else {
                     $data = [
                        'message' => $post->text,
@@ -56,7 +84,11 @@ class CronController extends Controller
                     $url = $post->account->provider_id.'/feed';
                 }
 
-               $img = $fb->post($url, $data, $accessToken);
+              if($post->account->facebook_page){
+                $fb->post($url, $data, $pageAccessToken);
+              } else {
+                $fb->post($url, $data, $accessToken);
+              }
 
                Post::where('id', $post->id)->update(['published' => 1]);
            }
@@ -64,11 +96,9 @@ class CronController extends Controller
        } catch(\Facebook\Exceptions\FacebookResponseException $e) {
            // When Graph returns an error
            echo 'Graph returned an error: ' . $e->getMessage();
-           exit;
        } catch(\Facebook\Exceptions\FacebookSDKException $e) {
            // When validation fails or other local issues
            echo 'Facebook SDK returned an error: ' . $e->getMessage();
-           exit;
        }
     }
 
@@ -120,7 +150,7 @@ class CronController extends Controller
                     'auth' => 'oauth'
                 ]);
 
-               if($responseMedia->getStatusCode() == 200) {
+               if(count($post->images) > 0) {
                    $response = $clientPost->post('statuses/update.json', [
                        'form_params' => [
                            'status' => $post->text,
@@ -136,11 +166,11 @@ class CronController extends Controller
                }
 
                Post::where('id', $post->id)->update(['published' => 1]);
-               SocialProvider::where('id', $post->account_id)->update(['error' => 0]);
+               Account::where('id', $post->account_id)->update(['error' => 0]);
             }
         } catch(RequestException $e) {
                    // When Graph returns an error
-                   SocialProvider::where('id', $post->account_id)->update(['error' => 1]);
+                   Account::where('id', $post->account_id)->update(['error' => 1]);
                    echo 'Twitter returned an error: ' . $e->getMessage();
                }
 

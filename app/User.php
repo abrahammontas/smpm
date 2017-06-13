@@ -40,9 +40,9 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    function socialProviders()
+    function accounts()
     {
-        return $this->hasMany(SocialProvider::class);
+        return $this->hasMany(Account::class);
     }
 
     function tokenFor($provider = 'facebook')

@@ -6,7 +6,7 @@ use App\User;
 use Socialite;
 use Session;
 use App\Http\Controllers\Controller;
-use App\SocialProvider;
+use App\Account;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -81,7 +81,7 @@ class RegisterController extends Controller
     public function redirectToProvider($provider)
     {
         if($provider == 'facebook') {
-            return Socialite::driver($provider)->scopes(['publish_actions', 'manage_pages'])->redirect();
+            return Socialite::driver($provider)->scopes(['publish_actions', 'manage_pages', 'publish_pages'])->redirect();
         } else {
             return Socialite::driver($provider)->redirect();
         }
@@ -108,29 +108,33 @@ class RegisterController extends Controller
             session('class-message','alert alert-danger');
             return redirect('/');
         }
-        //check if we have logged provider
 
-        $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())->get();
+        if(isset($socialUser->tokenSecret)) {
+            $tSecret = $socialUser->tokenSecret;
+        } else {
+            $tSecret = 0;
+        }
 
         if(Auth::check()) {
             $user= Auth::user();
-            $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())
+            $account = Account::where('provider_id',$socialUser->getId())
                 ->where('user_id', '=', $user->id)
                 ->first();
 
-            if($socialProvider) {
-                $socialProvider->update([
+            if($account) {
+                $account->update([
                     'token' => $socialUser->token, 
-                    'token_secret' => $socialUser->tokenSecret
+                    'token_secret' => $tSecret
                     ]);
             } else {
-                $user->socialProviders()->create(
+                $account = $user->accounts()->create(
                     [
                         'provider_id' => $socialUser->getId(),
                         'provider' => $provider,
                         'token' => $socialUser->token, 
-                        'token_secret' => $socialUser->tokenSecret,
-                        'alias' => $socialUser->getName()."'s ".$provider
+                        'token_secret' => $tSecret,
+                        'alias' => $socialUser->getName()."'s ".$provider,
+                        'facebook_page' => 0
                     ]
                 );
             }
@@ -145,47 +149,66 @@ class RegisterController extends Controller
                     'role_id' => 2]
                 );
 
-                $user->socialProviders()->create(
-                    [
-                        'provider_id' => $socialUser->getId(),
-                        'provider' => $provider,
-                        'token' => $socialUser->token, 
-                        'token_secret' => $socialUser->tokenSecret,
-                        'alias' => $socialUser->getName()."'s ".$provider
-                    ]
-                );
+                $account = $user->accounts()->create(
+                            [
+                                'provider_id' => $socialUser->getId(),
+                                'provider' => $provider,
+                                'token' => $socialUser->token, 
+                                'token_secret' => $tSecret,
+                                'alias' => $socialUser->getName()."'s ".$provider,
+                                'facebook_page' => 0
+                            ]
+                        );
             } else {
 
-                $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())
+                $account = Account::where('provider_id',$socialUser->getId())
                     ->where('user_id', '=', $user->id)
                     ->first();
 
-                if(!$socialProvider) {
-                    $user->socialProviders()->create(
-                        [
-                            'provider_id' => $socialUser->getId(),
-                            'provider' => $provider,
-                            'token' => $socialUser->token, 
-                            'token_secret' => $socialUser->tokenSecret,
-                            'alias' => $socialUser->getName()."'s ".$provider
-                        ]
-                    );
+                if(!$account) {
+                    $account = $user->accounts()->create(
+                                [
+                                    'provider_id' => $socialUser->getId(),
+                                    'provider' => $provider,
+                                    'token' => $socialUser->token, 
+                                    'token_secret' => $tSecret,
+                                    'alias' => $socialUser->getName()."'s ".$provider,
+                                    'facebook_page' => 0
+                                ]
+                            );
 
                 } else {
-                    if(isset($socialUser->tokenSecret)) {
-                        $tokenSecret = $socialUser->tokenSecret;
-                    } else {
-                        $tokenSecret = "";
-                    }
-                    SocialProvider::where('user_id', '=', $user->id)
-                        ->where('provider_id', '=', $socialUser->getId())
-                        ->update([
+                    $account->update([
                             'token' => $socialUser->token, 
-                            'token_secret' => $tokenSecret
+                            'token_secret' => $tSecret,
+                            'facebook_page' => 0
                             ]);
                 }
             }
         }
+
+        if($provider == 'facebook') {
+            $fb = new \Facebook\Facebook();
+
+            $data = [
+               'grant_type' => 'fb_exchange_token',
+               'client_id' => env('FB_ID'),
+               'client_secret' => env('FB_SECRET'),
+               'fb_exchange_token' => $socialUser->token
+            ];
+
+            $url = '/oauth/access_token' ;
+
+            $response = $fb->post($url, $data, $socialUser->token);
+
+            $account->update([
+                        'token' => $response->getAccessToken()
+                        ]);
+        }
+
+        $account->update([
+        'father_id' => $account->id
+        ]);
 
         if(Auth::check()) {
             session('message', 'The account called "'.$socialUser->getName()."'s ".$provider." has been created succesfully!");
