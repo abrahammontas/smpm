@@ -44,7 +44,9 @@
                         {!! Form::open(array('method' => 'DELETE', 'route' => array('post.destroy', $p->id))) !!}
                         <div class="btn-group" role="group" aria-label="...">
                             <a href="{{url('post/'.$p->id.'/edit')}}" @if($p->published) disabled @endif class='btn btn-primary'> Edit </a>
-                            <a href="{{url('post/'.$p->id)}}" class='btn btn-info'> Show </a>
+                            @if($p->provider == 'facebook')
+                              <a href="{{url('post/'.$p->id)}}" class='btn btn-info'> Show </a>
+                            @endif
                             {!! Form::submit('Delete', array('class' => 'btn btn-danger')) !!}
                         </div>
                         {!! Form::close() !!}
