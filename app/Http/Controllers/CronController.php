@@ -18,6 +18,7 @@ class CronController extends Controller
     public function index()
     {
         $this->facebook();
+        $this->twitter();
     }
 
 
