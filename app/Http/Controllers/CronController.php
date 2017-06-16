@@ -67,11 +67,16 @@ class CronController extends Controller
                             'token' => $response->getAccessToken()
                             ]);
 
+               if(file_exists(url('/storage/posts/'.$post->images->first()->image))){
+                   $path = url('/storage/posts/' . $post->images->first()->image);
+               } else {
+                   $path = url('/storage/users/default.png');
+               }
 
                 if(count($post->images) > 0) {
                    $data = [
                        'message' => $post->text,
-                       'source' => $fb->fileToUpload(url('/storage/posts/'.$post->images->first()->image)),
+                       'source' => $fb->fileToUpload($path),
                    ];
                    if($post->account->facebook_page){
                       $url = '/'.$post->account->provider_id.'/photos';
@@ -133,7 +138,11 @@ class CronController extends Controller
                         'auth' => 'oauth'
                     ]);
 
-                    $path = url('/storage/posts/'.$post->images->first()->image);
+                    if(file_exists(url('/storage/posts/'.$post->images->first()->image))){
+                        $path = url('/storage/posts/' . $post->images->first()->image);
+                    } else {
+                        $path = url('/storage/users/default.png');
+                    }
 
                     $responseMedia = $clientPost->post('media/upload.json', [
                         'multipart' => [
