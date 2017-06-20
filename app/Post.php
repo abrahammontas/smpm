@@ -34,4 +34,8 @@ class Post extends Model
     {
         return $this->belongsTo('App\Account');
     }
+
+    public function accountId(){
+        return $this->belongsTo('App\Account');
+    }
 }

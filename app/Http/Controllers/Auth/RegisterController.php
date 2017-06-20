@@ -112,7 +112,7 @@ class RegisterController extends Controller
         if(isset($socialUser->tokenSecret)) {
             $tSecret = $socialUser->tokenSecret;
         } else {
-            $tSecret = 0;
+            $tSecret = "";
         }
 
         if(Auth::check()) {

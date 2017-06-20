@@ -177,7 +177,7 @@ class AccountController extends Controller
 
                 $user = Auth::user();
 
-                $fbAccount = Account::where('user_id', $user->id)->where('provider', 'facebook')->first();
+                $fbAccount = Account::where('user_id', $user->id)->where('provider', 'facebook')->where('facebook_page', 0)->first();
 
                 // Get the \Facebook\GraphNodes\GraphUser object for the current user.
                 // If you provided a 'default_access_token', the '{access-token}' is optional.
@@ -187,7 +187,7 @@ class AccountController extends Controller
 
                 foreach ($fanPages as $fanPage) {
                     if(in_array($fanPage['id'], $accounts)) {
-                        $oldAccount = Account::where('provider_id',$fanPage['id'])->first();
+                        $oldAccount = Account::where('provider_id',$fanPage['id'])->where('user_id', $user->id)->first();
                         if(!$oldAccount) {
                             Account::create([
                                 'user_id' => $user->id,
@@ -216,6 +216,7 @@ class AccountController extends Controller
             // When Graph returns an error
             $message = 'Graph returned an error: ' . $e->getMessage();
             $class = "alert alert-danger";
+            echo $message;
 
             return redirect('account')->with('message', $message)
                 ->with('class', $class);
@@ -224,7 +225,7 @@ class AccountController extends Controller
             // When validation fails or other local issues
             $message = 'Facebook SDK returned an error: ' . $e->getMessage();
             $class = "alert alert-danger";
-
+            echo $message;
             return redirect('account')->with('message', $message)
                 ->with('class', $class);
         }
