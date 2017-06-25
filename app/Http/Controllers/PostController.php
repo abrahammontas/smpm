@@ -61,7 +61,7 @@ class PostController extends Controller
                 ]);
             }
 
-            $message = "The post '".$request->input('name')."' has been created successfully.";
+            $message = "Your post has been created successfully.";
             $class = "alert alert-success";
         }
         else{

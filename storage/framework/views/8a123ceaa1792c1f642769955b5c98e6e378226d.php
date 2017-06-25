@@ -3,9 +3,12 @@
   <div class="col-sm-12 col-md-12 main">
           <a class=" btn btn-warning" href="post/create">Add a new post</a>
           <h2 class="sub-header">Post list</h2>
-          <div class='<?php if(isset($class)){echo $class;}?>'>
-            <?php if(isset($message)){echo $message;}?>
-          </div>
+          <?php if(session('message')): ?>
+              <div class="<?php echo e(session('class')); ?>">
+                  <?php echo e(session('message')); ?>
+
+              </div>
+          <?php endif; ?>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -42,7 +45,7 @@
                         <?php echo Form::open(array('method' => 'DELETE', 'route' => array('post.destroy', $p->id))); ?>
 
                         <div class="btn-group" role="group" aria-label="...">
-                            <a href="<?php echo e(url('post/'.$p->id.'/edit')); ?>" <?php if($p->published): ?> disabled <?php endif; ?> class='btn btn-primary'> Edit </a>
+                            <a href=" <?php if($p->published): ?># <?php else: ?><?php echo e(url('post/'.$p->id.'/edit')); ?><?php endif; ?>"  <?php if($p->published): ?> disabled <?php endif; ?> class='btn btn-primary'> Edit </a>
                               <a href="<?php echo e(url('post/'.$p->id)); ?>" class='btn btn-info'> Show </a>
                             <?php echo Form::submit('Delete', array('class' => 'btn btn-danger')); ?>
 

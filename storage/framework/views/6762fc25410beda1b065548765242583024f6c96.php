@@ -40,7 +40,7 @@
 				<?php echo Form::label('Image'); ?>
 
 				<?php if(isset($post->images->first()->image)): ?>
-	            <img style="height:100px;" class="img img-responsive" src="/posts/<?php echo e($post->images->first()->image); ?>"/>
+	            <img style="height:100px;" class="img img-responsive" src="storage/posts/<?php echo e($post->images->first()->image); ?>"/>
 	    		<?php endif; ?>
 				<div class='input-group date' id='image'>
 					<input type='file' name="image" class="form-control" />

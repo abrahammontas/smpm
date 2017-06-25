@@ -5,9 +5,11 @@
   <div class="col-sm-12 col-md-12 main">
       <a class=" btn btn-warning" href="account/create">Add a new account</a>
           <h2 class="sub-header">Account list</h2>
-          <div class='<?php if(isset($class)){echo $class;}?>'>
-            <?php if(isset($message)){echo $message;}?>
-          </div>
+          @if (session('message'))
+              <div class="{{session('class')}}">
+                  {{ session('message') }}
+              </div>
+          @endif
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>

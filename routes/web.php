@@ -42,7 +42,9 @@ Route::group(['middleware' => ['auth']], function () {
 });
 
 
-Route::get('cron', 'CronController@index');
+Route::get('/cron', function () {
+    $exitCode = Artisan::call('publish:post');
+});
 
 Route::group(['middleware' => ['guest']], function () {
 
