@@ -46,9 +46,9 @@ class PublishScheduleContent extends Command
     public function handle()
     {
         $fbPosts = $this->fbPublisher->getScheduledPosts();
-        $this->info(count($fbPosts).' post for facebook.');
-        $twPosts = $this->fbPublisher->getScheduledPosts();
-        $this->info(count($twPosts).' post for twitter.');
+        $this->info(count($fbPosts).' post for facebook');
+        $twPosts = $this->twPublisher->getScheduledPosts();
+        $this->info(count($twPosts).' post for twitter');
 
         $i=0;
         $j=0;
@@ -63,7 +63,7 @@ class PublishScheduleContent extends Command
         foreach($twPosts as $post)
         {
             $j++;
-            $this->twPubliser->publish($post);
+            $this->twPublisher->publish($post);
             $this->info($j.'/'.count($twPosts));
         }
     }

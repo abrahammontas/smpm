@@ -2,6 +2,12 @@
 
 namespace App;
 
+use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Auth;
+use App\Post;
+use App\User;
+use App\Account;
+
 class TwitterPublisher implements Publisher
 {
 
@@ -19,7 +25,6 @@ class TwitterPublisher implements Publisher
     public function publish($post)
     {
         try {
-            $user = User::where('id', '=', $post->account->user->id)->first();
             $stack = \GuzzleHttp\HandlerStack::create();
 
             $middleware = new \GuzzleHttp\Subscriber\Oauth\Oauth1([
@@ -38,10 +43,10 @@ class TwitterPublisher implements Publisher
                     'auth' => 'oauth'
                 ]);
 
-                if(file_exists(url('/storage/posts/'.$post->images->first()->image))){
-                    $path = url('/storage/posts/' . $post->images->first()->image);
+                if(file_exists(public_path('/storage/posts/'.$post->images->first()->image))){
+                    $path = public_path('/storage/posts/' . $post->images->first()->image);
                 } else {
-                    $path = url('/storage/users/default.png');
+                    $path = public_path('/storage/users/default.png');
                 }
 
                 $responseMedia = $clientPost->post('media/upload.json', [

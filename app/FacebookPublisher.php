@@ -57,10 +57,10 @@ class FacebookPublisher implements Publisher
                 'token' => $response->getAccessToken()
             ]);
 
-            if(file_exists(url('/storage/posts/'.$post->images->first()->image))){
-                $path = url('/storage/posts/' . $post->images->first()->image);
+            if(file_exists(public_path('/storage/posts/'.$post->images->first()->image))){
+                $path = public_path('/storage/posts/' . $post->images->first()->image);
             } else {
-                $path = url('/storage/users/default.png');
+                $path = public_path('/storage/users/default.png');
             }
 
             if(count($post->images) > 0) {
