@@ -35,4 +35,5 @@ class Account extends Model
     {
         return $this->hasMany('App\Post');
     }
+
 }
