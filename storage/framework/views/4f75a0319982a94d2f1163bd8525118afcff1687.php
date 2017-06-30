@@ -3,9 +3,12 @@
   <div class="col-sm-12 col-md-12 main">
       <a class=" btn btn-warning" href="account/create">Add a new account</a>
           <h2 class="sub-header">Account list</h2>
-          <div class='<?php if(isset($class)){echo $class;}?>'>
-            <?php if(isset($message)){echo $message;}?>
-          </div>
+          <?php if(session('message')): ?>
+              <div class="<?php echo e(session('class')); ?>">
+                  <?php echo e(session('message')); ?>
+
+              </div>
+          <?php endif; ?>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
