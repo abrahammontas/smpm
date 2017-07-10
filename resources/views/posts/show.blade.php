@@ -38,7 +38,7 @@
 		</div>	
 		<div class="col-lg-4">
               @foreach($post->images as $image)
-                  <img style="height:100px;" class="img img-responsive" src="/posts/{{$image->image}}"/>
+                  <img style="height:100px;" class="img img-responsive" src="/storage/posts/{{$image->image}}"/>
               @endforeach
         </div>	
 </div>

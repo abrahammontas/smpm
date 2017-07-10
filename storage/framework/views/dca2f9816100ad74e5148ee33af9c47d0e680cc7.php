@@ -47,7 +47,7 @@
 		</div>	
 		<div class="col-lg-4">
               <?php $__currentLoopData = $post->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
-                  <img style="height:100px;" class="img img-responsive" src="/posts/<?php echo e($image->image); ?>"/>
+                  <img style="height:100px;" class="img img-responsive" src="/storage/posts/<?php echo e($image->image); ?>"/>
               <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
         </div>	
 </div>
